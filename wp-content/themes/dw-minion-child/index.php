@@ -15,7 +15,8 @@
 						$i = $maxRegularPosts * $paged - $maxRegularPosts;
 					}
 					?>
-						<?php get_template_part( 'content', get_post_format() ); ?>
+
+						<?php get_template_part( 'content', get_post_type() ); ?>
 						<?php 
 
 						$externalPosts = get_posts(array("posts_per_page" => 2, "orderby" => "date", "post_type" => "external_post", "offset" => $i));
