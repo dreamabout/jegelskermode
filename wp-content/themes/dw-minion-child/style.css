@@ -279,13 +279,13 @@ body {
 }
 
 .accordion-heading .accordion-toggle,
-.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus,#commentform #submit {
   background-color: #f1553f;  
 }
 .nav-tabs>.active>a:before {
   border-top: 6px solid #f1553f;
 }
-.entry-meta a, a:hover,.widget_nav_menu .current_page_item>a, .widget_nav_menu .current-menu-item>a{
+.entry-meta a, a:hover,.widget_nav_menu .current_page_item>a, .widget_nav_menu .current-menu-item>a,.comment-list .comment-datetime:hover{
   color: #f1553f;
 }
 
