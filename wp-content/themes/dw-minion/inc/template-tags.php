@@ -101,7 +101,6 @@ endif;
 
 if ( ! function_exists( 'dw_minion_entry_meta' ) ) :
 function dw_minion_entry_meta() {
-	echo get_post_type();
 	if ( 'post' != get_post_type() || has_post_format('link') ) return false;
 	echo '<div class="entry-meta">';
 

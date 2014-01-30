@@ -28,32 +28,53 @@ class dw_dynamic_Widget extends WP_Widget {
       'widgets'    =>  '',
       'title'     =>  ''
     ) );
-  ?>
-  <input type="hidden" name="<?php echo $this->get_field_name('widgets') ?>" id="<?php echo $this->get_field_id('widgets') ?>" value="<?php echo htmlentities( $instance['widgets'] ) ?>" >
-  <input type="hidden" name="<?php echo $this->get_field_name('title') ?>" id="<?php echo $this->get_field_id('title') ?>" value="<?php echo $instance['title'] ?>" class="widefat">
-  <div class="dw-widget-extends" data-setting="<?php echo $this->get_field_id('widgets') ?>" >
-    <p class="description"><?php _e('Drag & Drop Widgets Here','dw_minion') ?></p>
-    <?php
-      $widgets = explode(':dw-data:', $instance['widgets'] );
-      if( !empty($widgets) && is_array($widgets) ){
-        foreach ($widgets as $widget) {
-          if( !empty( $widget ) ) {
-            $url = rawurldecode($widget);
-            parse_str($widget,$s);
-            $this->dw_display_widgets($s);
-          }
-        }
-      }
     ?>
-  </div>
-  <?php
+      <input type="hidden" class="widefat" name="<?php echo $this->get_field_name('widgets') ?>" id="<?php echo $this->get_field_id('widgets') ?>" value="<?php echo htmlentities( $instance['widgets'] ) ?>" >
+      <input type="hidden" name="<?php echo $this->get_field_name('title') ?>" id="<?php echo $this->get_field_id('title') ?>" value="<?php echo $instance['title'] ?>" class="widefat">
+      <div class="dw-widget-extends" data-setting="#<?php echo $this->get_field_id('widgets') ?>" >
+        <p class="description"><?php _e('Drag & Drop Widgets Here','dw_minion') ?></p>
+        <?php
+          $widgets = explode(':dw-data:', $instance['widgets'] );
+          if( !empty($widgets) && is_array($widgets) ){
+            $number = 1;
+            foreach ($widgets as $widget) {
+              if( !empty( $widget ) ) {
+                $url = rawurldecode($widget);
+                parse_str($widget,$s);
+                $this->dw_display_widgets($s, $number);
+              }
+              $number++;
+            }
+          }
+        ?>
+      </div>
+    <?php
   }
 
-  function dw_display_widgets($s){
-    global $wp_registered_widget_updates;
+  function dw_get_widgets( $id_base, $number ){
+    global $wp_registered_widgets;
+
+    $widget = false;
+    foreach ($wp_registered_widgets as $key => $wdg) {
+      if( strpos( $key, $id_base ) === 0 ) {
+        if( isset($wp_registered_widgets[ $key ]['callback'][0]) && is_object($wp_registered_widgets[ $key ]['callback'][0]) ) {
+          $classname = get_class( $wp_registered_widgets[ $key ]['callback'][0] );
+          $widget = new $classname;
+          $widget->id_base = $id_base;
+          $widget->number = $number;
+          break;
+        }
+      }
+    }
+
+    return $widget;
+  }
+
+  function dw_display_widgets($s, $number){
     $instance = !empty($s['widget-'.$s['id_base']]) ? array_shift( $s['widget-'.$s['id_base']] ) : array();
-    $widget = $wp_registered_widget_updates[$s['id_base']]['callback'][0]; ?>  
-    
+    $widget = $this->dw_get_widgets( $s['id_base'], $number );
+  ?>  
+    <?php if( $widget ) { ?>
     <div id="<?php echo esc_attr($s['widget-id']); ?>" class="widget">
       <div class="widget-top">
         <div class="widget-title-action">
@@ -68,7 +89,13 @@ class dw_dynamic_Widget extends WP_Widget {
       </div>
 
       <div class="widget-inside">
-        <div class="widget-content"><?php if( isset($s['id_base'] ) ) { $widget->form($instance); } else { echo "\t\t<p>" . __('There are no options for this widget.','dw_minion') . "</p>\n"; } ?></div>
+        <div class="widget-content">
+          <?php if( isset($s['id_base'] ) ) { 
+            $widget->form($instance); 
+          } else { 
+            echo "\t\t<p>" . __('There are no options for this widget.','dw_minion') . "</p>\n"; 
+          } ?>
+        </div>
         <input data-dw="true" type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr($s['widget-id']); ?>" />
         <input data-dw="true" type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr($s['id_base']); ?>" />
         <input data-dw="true" type="hidden" name="widget-width" class="widget-width" value="<?php echo esc_attr($s['widget-width']); ?>">
@@ -87,6 +114,7 @@ class dw_dynamic_Widget extends WP_Widget {
 
       <div class="widget-description"><?php echo ( $widget_description = wp_widget_description($widget_id) ) ? "$widget_description\n" : "$widget_title\n"; ?></div>
     </div>
+    <?php } ?>
   <?php
   }
 }
@@ -107,21 +135,27 @@ class dw_tabs_Widget extends dw_dynamic_Widget {
     ));
     
     $widgets = explode(':dw-data:', $instance['widgets'] );
-    if( !empty($widgets) && is_array($widgets) ){
-      $i = 0; ?>
+    if( !empty($widgets) && is_array($widgets) ){ ?>
       <div class="nav-tab-select-wrap">
         <select name="nav-tabs-<?php echo $this->id ?>" class="nav-tabs-by-select visible-phone" >
           <?php
+            $i = 0;
             foreach ($widgets as $widget ) {
               $selected = '';
-              if( $i == 0 ){ $active='selected="selected"'; $i++; }
+              if( $i == 0 ){ $active='selected="selected"'; }
+              $i++;
               if( !empty( $widget ) ) {
                 $url = rawurldecode($widget);
                 parse_str($url,$s);
                 $instance = !empty($s['widget-'.$s['id_base']]) ? array_shift( $s['widget-'.$s['id_base']] ) : array();
-                $widget = $wp_registered_widget_updates[$s['id_base']]['callback'][0];
-                $widget_title = isset($instance['title']) ? $instance['title'] : $widget->name;
-                echo '<option data-target="#'.$s['widget-id'].'" '.$selected.' value="#'.$s['widget-id'].'" >'.strtoupper( $widget_title ).'</option>';
+
+                $widget = $this->dw_get_widgets( $s['id_base'], $i );
+                // $widget = isset( $wp_registered_widget_updates[$s['id_base']] ) ? $wp_registered_widget_updates[$s['id_base']]['callback'][0] : false;
+
+                if( $widget ) {
+                  $widget_title = isset($instance['title']) ? $instance['title'] : $widget->name;
+                  echo '<option data-target="#'.$s['widget-id'].'" '.$selected.' value="#'.$s['widget-id'].'" >'.strtoupper( $widget_title ).'</option>';
+                }
               }
             }
           ?>
@@ -132,49 +166,60 @@ class dw_tabs_Widget extends dw_dynamic_Widget {
       $i = 0;
       foreach ($widgets as $widget ) {
         $active = '';
-        if( $i == 0 ){ $active='active'; $i++; }
+        if( $i == 0 ){ $active='active'; } 
+        $i++;
         if( !empty( $widget ) ) {
           $url = rawurldecode($widget);
           parse_str($widget,$s);
           $instance = !empty($s['widget-'.$s['id_base']]) ? array_shift( $s['widget-'.$s['id_base']] ) : array();
-          $widget = $wp_registered_widget_updates[$s['id_base']]['callback'][0];
-          $widget_title = isset($instance['title']) ? $instance['title'] : $widget->name;
-          echo '<li class="'.$active.'"><a href="#'.$s['widget-id'].'" data-toggle="tab">'.$widget_title.'</a></li>';
+
+          $widget = $this->dw_get_widgets( $s['id_base'], $i );
+          // $widget = isset( $wp_registered_widget_updates[$s['id_base']] ) ? $wp_registered_widget_updates[$s['id_base']]['callback'][0] : false;
+          if( $widget ) {
+            $widget_title = isset($instance['title']) ? $instance['title'] : $widget->name;
+            echo '<li class="'.$active.'"><a href="#'.$s['widget-id'].'" data-toggle="tab">'.$widget_title.'</a></li>';
+          }
         }
       }
       ?>
       </ul>
       <div class="tab-content">
-      <?php
-      $i = 0;
-      foreach ($widgets as $widget) {
-        $active = '';
-        if( $i == 0 ) { $active='active'; $i++; }
-          if( !empty( $widget ) ) {
-            $url = rawurldecode($widget);
-            parse_str($widget,$s);
-            $instance = isset($s['widget-'.$s['id_base']]) ? array_shift( $s['widget-'.$s['id_base']] ) : array();
-            $widget = $wp_registered_widget_updates[$s['id_base']]['callback'][0];
-            if( isset($s['id_base'] ) ) { ?>
-              <?php $widget_options = $widget->widget_options; ?>
-                <div class="tab-pane <?php echo 'widget_'.$s['widget-id'].' '.$widget_options['classname'] ?> <?php echo $active ?>" id="<?php echo $s['widget-id'] ?>">
-                  <?php  
-                  $default_args = array( 
-                    'before_widget' => '', 
-                    'after_widget' => '', 
-                    'before_title' => '<h3 class="widget-title">',
-                    'after_title' => '</h3>' 
-                  );
-                  $widget->widget($default_args,$instance);
-                  ?>
-                </div>
-            <?php
+        <?php
+          $i=0;
+          foreach ($widgets as $widget) {
+            $active = '';
+            if( $i == 0 ) { $active='active'; }
+             $i++;
+              if( !empty( $widget ) ) {
+                $url = rawurldecode($widget);
+                parse_str($widget,$s);
+                $instance = isset($s['widget-'.$s['id_base']]) ? array_shift( $s['widget-'.$s['id_base']] ) : array();
+
+                $widget = $this->dw_get_widgets( $s['id_base'], $i );
+                // $widget = isset( $wp_registered_widget_updates[$s['id_base']] ) ? $wp_registered_widget_updates[$s['id_base']]['callback'][0] : false;
+
+                if( isset($s['id_base'] ) && $widget ) {
+                  $widget_options = $widget->widget_options; 
+                ?>
+                  <div class="tab-pane <?php echo 'widget_'.$s['widget-id'].' '.$widget_options['classname'] ?> <?php echo $active ?>" id="<?php echo $s['widget-id'] ?>">
+                    <?php  
+                      $default_args = array( 
+                        'before_widget' => '', 
+                        'after_widget' => '', 
+                        'before_title' => '<h3 class="widget-title">',
+                        'after_title' => '</h3>' 
+                      );
+                      $widget->widget($default_args,$instance);
+                    ?>
+                  </div>
+                <?php
+                }
+              }
             }
-          }
-        } ?>
+          } 
+        ?>
       </div>
-    <?php
-    }
+  <?php
   }
 }
 add_action( 'widgets_init', create_function( '', "register_widget('dw_tabs_Widget');" ) );
@@ -206,9 +251,11 @@ class dw_accordion_Widget extends dw_dynamic_Widget {
           $url = rawurldecode($widget);
           parse_str($url,$s);
           $instance = !empty($s['widget-'.$s['id_base']]) ? array_shift( $s['widget-'.$s['id_base']] ) : array();
-          $widget = $wp_registered_widget_updates[$s['id_base']]['callback'][0];
 
-          if( isset($s['id_base'] ) ){ ?>
+          $widget = $this->dw_get_widgets( $s['id_base'], $i );
+          // $widget = isset($wp_registered_widget_updates[$s['id_base']]) ? $wp_registered_widget_updates[$s['id_base']]['callback'][0] : false;
+
+          if( isset($s['id_base'] ) && $widget ){ ?>
             <?php $widget_options = $widget->widget_options; ?>
             <div class="accordion-group">
               <div class="accordion-heading"><a class="accordion-toggle <?php echo $collapse ?>" data-toggle="collapse" data-parent="#accordion-<?php echo $this->id ?>" href="#<?php echo $this->id ?>-<?php echo $s['widget-id'] ?>"><?php echo ( isset($instance['title']) ) ? $instance['title'] : $widget->name; ?></a></div>

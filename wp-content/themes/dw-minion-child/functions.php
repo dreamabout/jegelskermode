@@ -153,3 +153,4 @@ add_action('pre_get_posts', 'custom_post_author_archive');
 
 require (get_stylesheet_directory() . '/incs/wp_bootstrap_navwalker.php');
 require (get_stylesheet_directory() . '/incs/template-tags.php');
+require (get_stylesheet_directory() . '/incs/extras.php');

@@ -218,7 +218,8 @@
   //   .transition(max-height .3s);
   // }
 
-  .current_page_item > a {
+  .current_page_item > a,
+  .current-menu-item > a  {
     color:  @linkColorHover;
   }
 
@@ -644,7 +645,7 @@
 
   img {
     border: 1px solid @gray9;
-    width: 125px;
+    width: auto;
     height: 125px;
     text-align: center;
     line-height: 125px;
@@ -653,7 +654,7 @@
 
 @media( max-width: 340px ) {
   .ads-125 img {
-    width: 115px;
+    height: 115px;
   }
 }
 
@@ -829,4 +830,12 @@
   #secondary {
     max-width: 280px;
   }
+}
+
+// iframe fix social share plugin
+// -------------------------
+iframe[id^="oauth2relay"] {     
+     position: fixed !important; 
+     border: 0 none;
+     z-index: -100;
 }

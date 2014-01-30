@@ -6,10 +6,10 @@
 					<h1 class="page-title">
 						<?php
 							if ( is_category() ) :
-								single_cat_title();
+								printf( __( 'Category Archives: %s', 'dw-minion' ), single_cat_title( '', false ) );
 
 							elseif ( is_tag() ) :
-								single_tag_title();
+								printf( __( 'Tag Archives: %s', 'dw-minion' ), single_tag_title( '', false ) );
 
 							elseif ( is_author() ) :
 

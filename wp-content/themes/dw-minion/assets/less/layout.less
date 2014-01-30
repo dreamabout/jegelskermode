@@ -14,13 +14,13 @@
 .lt-ie9 {
   #page {
     padding: 2*@layoutGutterWidth @layoutGutterWidth 0;
-    margin-left: @layoutGutterWidth; 
+    margin-left: @layoutGutterWidth;  
   }
 }
 
 @media ( min-width: 1200px ) {
   #page {
-    padding: 2*@layoutGutterWidth @layoutGutterWidth 0; 
+    padding: 2*@layoutGutterWidth @layoutGutterWidth 0;  
   }
 } 
 
@@ -68,8 +68,12 @@
 
 @media ( max-width: 1199px ) {
   .site-nav {
-    position: absolute;
+    position: fixed;
     top: 0;
+  }
+
+  .show-nav .site-nav {
+    position: absolute;
   }
 
   .admin-bar .site-nav {
@@ -120,7 +124,7 @@
 // site actions
 .site-action-768-ie() {
   .site-actions {
-    position: absolute;
+    /*position: absolute;*/
     top: -1px; 
     left: 0;
   }
@@ -163,6 +167,11 @@
   .container {
     padding: 0 @layoutGutterWidth767;
   }
+}
+
+// Top sidebar
+.top-sidebar {
+  margin-bottom: 30px;
 }
 
 // Primary - secondary
@@ -209,5 +218,11 @@
   #secondary {
     margin-top: @layoutGutterWidth767;
     //display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #wpadminbar {
+    position: fixed;
   }
 }

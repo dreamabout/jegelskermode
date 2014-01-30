@@ -1,5 +1,15 @@
 jQuery(document).ready(function($){
 
+  var vph = $(window).height();
+  $('.site-main').css('min-height', vph + 'px'); 
+  $(window).resize(function(){
+    resizeMain();
+  });
+  function resizeMain() {
+    var vph = $(window).height();
+    $('.site-main').css('min-height', vph + 'px'); 
+  }
+
   $('.action.search label, .action.search i').click(function(){
     $('.action.search').toggleClass('active');
   });
