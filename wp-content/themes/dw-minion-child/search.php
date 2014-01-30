@@ -9,10 +9,33 @@
 
 				<?php if ( have_posts() ) : ?>
 
-					<?php while ( have_posts() ) : the_post(); ?>
+					<?php 	
+					$maxRegularPosts = get_option('posts_per_page');
+					while ( have_posts() ) : the_post(); ?>
+					<?php global $paged; 
+					if (!$paged) {
+						$paged = 1;
+					}
+					if (!isset($i)) {
+						$i = $maxRegularPosts * $paged - $maxRegularPosts;
+					}
+					?>
+						<?php get_template_part( 'content', get_post_format() ); ?>
+						<?php 
 
-						<?php get_template_part( 'content', 'search' ); ?>
+						$externalPosts = get_posts(array("posts_per_page" => 2, "orderby" => "date", "post_type" => "external_post", "offset" => $i));
+						if(count($externalPosts) > 0) : ?>
+							<div class="external-posts clearfix">
+							<?php foreach($externalPosts as $post) : ?>
+								<?php 
+								setup_postdata($post);
 
+								get_template_part( 'content', get_post_type() ); ?>
+							<?php endforeach; ?>
+							<?php $i = $i + count($externalPosts); ?>
+							</div>
+						<?php endif; ?>
+					<?php $i++; ?>		
 					<?php endwhile; ?>
 
 					<?php dw_minion_content_nav( 'nav-below' ); ?>
