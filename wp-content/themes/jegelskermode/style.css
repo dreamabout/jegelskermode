@@ -1,0 +1,13 @@
+/*
+Theme Name: 	Af build 25-03-2013
+Theme URI: 		
+Description:  Theme for the blog: Jegelskermode.dk
+Version: 		1
+Author: 		Lars Steen Møller
+Author URI: 	http://www.lars-m.com
+*/
+
+/* Import different stylesheets */
+@import url('res/frameworks/bs/css/bootstrap.css');
+@import url('res/css/custom.css');
+

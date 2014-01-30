@@ -1,0 +1,280 @@
+/*
+ Theme Name:     Jeg elsker mode
+ Author: Thomas Faurbye Nielsen
+ Version:        1.0.0
+ Template:       dw-minion
+*/
+
+@import url("../dw-minion/style.css");
+
+/* =Theme customization starts here
+-------------------------------------------------------------- */
+.single-external_post article.external_post .entry-thumbnail {
+    display: none;
+}
+
+.site-title.display-logo img {
+  max-width: 190px;
+}
+
+.row-fluid.author {
+    padding-top: 35px;
+    border-top: 1px solid #ccc;
+    padding-bottom: 30px;
+}
+
+#main-menu {
+    border-bottom:1px solid #cecece;
+    margin-top:0;
+    margin-right:0;
+    margin-left:240px;
+    margin-bottom:25px;
+    height:40px;
+}
+
+.entry-meta > .sep {
+  margin: 15px 0 15px 0;
+}
+.entry-meta > .sep > .post-format {
+  display:none;
+}
+.widget_recent_entries li:before {
+  display:none;
+}
+.widget_recent_entries li {
+  padding-left:0;
+}
+#main-menu > ul {
+    height: 30px;
+    float: right; }
+    #main-menu > ul > li {
+      float: left;
+      padding-right: 25px;
+      margin-right: 25px; 
+      list-style:none;
+    }
+      #main-menu > ul > li > a, #main-menu > ul > li > span {
+        display: block;
+        height: 40px;
+        line-height: 30px;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: #000;
+        cursor: pointer; 
+        font-weight:bold;
+    }
+      #main-menu > ul > li > ul.dropdown-menu a,#main-menu > ul > li > ul.dropdown-menu span {
+        color:#fff;
+      }
+      #main-menu > ul > li > ul.dropdown-menu {
+        top: 38px;
+        right:25px;
+        left:auto;
+        z-index: 1002;
+        background-color: #f1553f;
+        border: 1px solid #f1553f;
+        box-shadow: none;
+        border-radius:0;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none; }
+       /*  #main-menu > ul > li > ul.dropdown-menu:before {
+          content: '';
+          display: inline-block;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
+          border-bottom: 8px solid #f1553f;
+          border-bottom-color: rgba(0, 0, 0, 0.2);
+          position: absolute;
+          top: -8px;
+          left: 10px; } */
+        #main-menu > ul > li > ul.dropdown-menu:after {
+          content: '';
+          display: inline-block;
+          border-left: 7px solid transparent;
+          border-right: 7px solid transparent;
+          border-bottom: 7px solid #f1553f;
+          position: absolute;
+          top: -7px;
+          right: 5px; }
+.site-actions {
+  height:100%;
+  background-color: #ccc;
+}
+.site-actions i, .site-actions .action.search label {
+  background-color: #ccc;
+  background-image:none;
+  color: #fff;
+}
+.site-actions .action.search label, .site-actions .action.search form.searchform {
+  width:39px;
+}
+.site-actions .show-site-nav i {
+  border-right:none; 
+}
+.show-site-nav {
+  border-bottom: 1px solid #fff;
+}
+#main-sidebar .widget_text:first-child {
+    border-top: none;
+    margin-top: -20px;
+    padding-top: 10px;
+}
+#main-sidebar .widget_categories, #main-sidebar .widget_categories li {
+  text-transform: uppercase;
+}
+.widget_categories > ul > li:before {
+  display:none;
+}
+.read-more.btn.btn-small {
+  text-transform: uppercase;
+}
+.category .taxonomy-description {
+  font-size: 85%;
+  color: #bbb;
+}
+.category .page-title {
+  color: #bbb;
+  text-transform: uppercase;
+}
+.widget_categories >ul > li {
+  padding-left:0;
+}
+.external-post {
+    font-size: 12px;
+}
+.external-post .entry-title {
+    font-size: 25px;
+}
+.external_post .entry-title {
+    font-size: 22px;
+}
+.external_post .sep {
+    margin: 0;
+    border-top: none;
+}
+.external_post .entry-header,.external_post .entry-meta {
+    margin-bottom: 10px;
+}
+.external_post .entry-content {
+    font-size: 13px;
+}
+.external_post .content-block {
+  float: left;
+}
+.external_post .entry-thumbnail {
+  float: left;
+  width:200px;
+}
+.external-posts.clearfix {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 25px;
+}
+.external_post.has-thumb .content-block {
+  float: left;
+  width: 400px;
+  padding-left: 20px;
+}
+.external-posts .clearfix.hentry {
+    margin-bottom: 20px !important;
+}
+body {
+    background-color:#fff;
+}
+
+.carousel-caption {
+  top:0;
+  bottom:auto;
+}
+.carousel-control {
+  top:10px;
+  bottom:auto;
+}
+.description .image.pull-left {
+  width:200px;
+  padding-right:25px;
+}
+.description .pull-left {
+  width:395px;
+}
+
+.author .description {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+}
+.page-header {
+  border-bottom:1px solid #ccc;
+}
+.hosted {
+  color: #000;
+  font-size:10px;
+  font-weight:200;
+}
+.uppercase {
+  text-transform: uppercase;
+  font-weight:500;
+}
+
+@media (max-width: 767px) {
+  #main-menu { display:none}
+  .site-actions {
+      height: auto;
+      border-bottom:1px solid #fff;
+  }
+  .site-actions .show-site-nav i {
+    border-right: 1px solid #fff; 
+  }
+  .site-actions .show-site-nav {
+    border-bottom:none;
+  }
+  .site-actions .actions > .action {
+    border-left: 1px solid #fff;
+  }
+
+  #site-title { display:none;}
+}
+
+@media (min-width: 768px) {
+    .site-actions { border-right: 1px solid #fff;}
+    #page {padding-top:20px;}
+    .site-actions .actions > .action,.site-actions .social {
+      border-bottom:1px solid #fff;
+    }
+    .site-actions .actions > .back-top {
+      border-bottom:none;
+      border-top: 1px solid #fff;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+    #main-menu { margin-left:90px;}
+    .site-main,.site-nav-inner {
+        padding: 40px 0 0;
+    }
+    .site-nav-inner .container {
+        padding:0 20px;
+    }
+    .site-nav-inner {
+        display:none;
+    }
+    .show-nav .site-nav-inner {
+        display: block;
+    }
+    #site-title {
+      float:left;
+      font-size:35px;
+      padding-left:10px;
+    }
+    #site-title img {
+      height: 75px;
+      margin-top: -10px;
+    }
+}
+@media (min-width: 1200px) {
+  .hidden-desktop {
+    display:none;
+  }
+}
+
