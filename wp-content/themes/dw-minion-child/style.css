@@ -285,7 +285,7 @@ body {
 .nav-tabs>.active>a:before {
   border-top: 6px solid #f1553f;
 }
-.entry-meta a, a:hover{
+.entry-meta a, a:hover,.widget_nav_menu .current_page_item>a, .widget_nav_menu .current-menu-item>a{
   color: #f1553f;
 }
 
