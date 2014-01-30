@@ -278,3 +278,14 @@ body {
   }
 }
 
+.accordion-heading .accordion-toggle,
+.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+  background-color: #f1553f;  
+}
+.nav-tabs>.active>a:before {
+  border-top: 6px solid #f1553f;
+}
+.entry-meta a, a:hover{
+  color: #f1553f;
+}
+
