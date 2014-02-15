@@ -27,21 +27,16 @@
 
                     	foreach ($rows as $blog) {
                     		$blog = unserialize($blog);
-                            $name = trim($blog['bloginfo']['name'], ' \t\n\r\0\x0B".*\'-');
+                            $name = trim($blog['bloginfo']['name'], ' \t\n\r\0\x0B".*\'-'); // trim chars from names to fix sorting
                             $link = $blog['bloginfo']['link'];
                             $sorted[$name] = $link;
                     	}
 
-                        ksort($sorted, SORT_LOCALE_STRING);
+                        ksort($sorted, SORT_LOCALE_STRING); // sort entries by system default locale
 
                         foreach ($sorted as $name => $link) {
-                            printf('<a href="%s">%s</a><br>', $link, $name);
+                            printf('<a class="bloglist-link" href="%s">%s</a><br>', $link, $name);
                         }
-
-                        print "<pre>";
-                        print htmlspecialchars(print_r($sorted, true));
-                        print "\r\n\r\n";
-                        print "</pre>";
 
                     	?>
                     </div>
