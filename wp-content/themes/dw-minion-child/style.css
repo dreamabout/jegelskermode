@@ -27,6 +27,14 @@
   color: #f1553f;
 }
 
+@media (max-width: 767px) {
+  .bloglist {
+    -moz-column-count: 1;
+    -webkit-column-count: 1;
+    column-count: 1;
+  }
+}
+
 .row-fluid.author {
     padding-top: 35px;
     border-top: 1px solid #ccc;
