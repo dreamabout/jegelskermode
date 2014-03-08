@@ -17,6 +17,16 @@
   max-width: 190px;
 }
 
+.bloglist {
+  -moz-column-count: 3;
+  -webkit-column-count: 3;
+  column-count: 3;
+}
+
+.bloglist h3 {
+  color: #f1553f;
+}
+
 .row-fluid.author {
     padding-top: 35px;
     border-top: 1px solid #ccc;
