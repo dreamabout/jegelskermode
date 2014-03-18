@@ -27,6 +27,23 @@
   color: #f1553f;
 }
 
+.blogsignup fieldset {
+  border: none;
+  padding: 20px 0;
+}
+
+.blogsignup select {
+  width: 100%;
+}
+
+.blogsignup .agreement-label {
+  line-height: 40px;
+}
+
+.blogsignup input[type="checkbox"] {
+  -webkit-appearance: checkbox;
+}
+
 @media (max-width: 767px) {
   .bloglist {
     -moz-column-count: 1;
