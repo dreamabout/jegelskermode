@@ -3,16 +3,16 @@
 Plugin Name: Infinite SEO
 Plugin URI: http://premium.wpmudev.org/project/wpmu-dev-seo/
 Description: Every SEO option that a site requires, in one easy bundle.
-Version: 1.6.7
+Version: 1.6.8
 Network: true
 Text Domain: wds
-Author: Ulrich Sossou (Incsub)
-Author URI: http://ulrichsossou.com/
+Author: WPMU DEV
+Author URI: http://premium.wpmudev.org
 WDP ID: 167
 */
 
 /* Copyright 2010-2011 Incsub (http://incsub.com/)
-
+  Author - Ulrich Sossou (Incsub)
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -69,7 +69,9 @@ if (!defined('WDS_SITEMAP_SKIP_TAXONOMIES')) define('WDS_SITEMAP_SKIP_TAXONOMIES
 if (!defined('WDS_SITEMAP_SKIP_SE_NOTIFICATION')) define('WDS_SITEMAP_SKIP_SE_NOTIFICATION', false);
 if (!defined('WDS_SITEMAP_SKIP_ADMIN_UPDATE')) define('WDS_SITEMAP_SKIP_ADMIN_UPDATE', false);
 
-define( 'WDS_VERSION', '1.6.7' );
+if (!defined('WDS_EXPERIMENTAL_FEATURES_ON')) define('WDS_EXPERIMENTAL_FEATURES_ON', false);
+
+define( 'WDS_VERSION', '1.6.8' );
 
 /**
  * Setup plugin path and url.
@@ -90,6 +92,7 @@ function _wds_init () {
 
 	require_once ( WDS_PLUGIN_DIR . 'wds-core/wds-core-wpabstraction.php' );
 	require_once ( WDS_PLUGIN_DIR . 'wds-core/wds-core.php' );
+
 	global $wds_options;
 	$wds_options = get_wds_options();
 
@@ -135,22 +138,25 @@ function _wds_init () {
 			require_once ( WDS_PLUGIN_DIR . 'wds-onpage/wds-onpage.php' );
 		}
 
+		if (defined('WDS_EXPERIMENTAL_FEATURES_ON') && WDS_EXPERIMENTAL_FEATURES_ON) {
+			require_once ( WDS_PLUGIN_DIR . 'wds-sitemaps/wds-video_sitemaps.php' );
+		}
+
 	}
 }
 if (defined('WDS_CONDITIONAL_EXECUTION') && WDS_CONDITIONAL_EXECUTION) add_action('plugins_loaded', '_wds_init', 10);
 else _wds_init();
 
-
-
-/**
- * Show notification if WPMUDEV Update Notifications plugin is not installed
- **/
-if ( ! function_exists( 'wdp_un_check' ) ) {
-	add_action( 'admin_notices', 'wdp_un_check', 5 );
-	add_action( 'network_admin_notices', 'wdp_un_check', 5 );
-
-	function wdp_un_check() {
-		if ( !class_exists( 'WPMUDEV_Update_Notifications' ) && current_user_can( 'edit_users' ) )
-			echo '<div class="error fade"><p>' . __('Please install the latest version of <a href="http://premium.wpmudev.org/project/update-notifications/" title="Download Now &raquo;">our free Update Notifications plugin</a> which helps you stay up-to-date with the most stable, secure versions of WPMU DEV themes and plugins. <a href="http://premium.wpmudev.org/wpmu-dev/update-notifications-plugin-information/">More information &raquo;</a>', 'wds') . '</p></div>';
-	}
-}
+// Set up dashboard notices
+global $wpmudev_notices;
+if (!is_array($wpmudev_notices)) $wpmudev_notices = array();
+$wpmudev_notices[] = array(
+	'id' => 167,
+	'name' => 'Infinite SEO',
+	'screens' => array(
+		'settings_page_wds_wizard',
+		'settings_page_wds_wizard-network',
+	),
+);
+if (file_exists(WDS_PLUGIN_DIR . 'wds-core/wpmudev-dash-notification.php')) require_once (WDS_PLUGIN_DIR . 'wds-core/wpmudev-dash-notification.php');
+// End dashboard notices

@@ -14,7 +14,7 @@ function wds_seoopt_settings() {
 	but it has been customized so that the Home Meta Description is WPMU DEV Premium is:
 	<blockquote>devoted to plugins, themes, resources and support to assist you in creating the absolute best WordPress MU (WPMU) site you can.</blockquote>
 	<p><img src="%s" alt="title and description sample" /></p>
-	<p>This plugin also adds a Infinite SEO module below the Write Post / Page editor which you can use to customise SEO options for individual posts and pages.</p>' , 'wds' ), WDS_PLUGIN_URL . 'images/onpagesample.png' );	   	 	    	 	   	 
+	<p>This plugin also adds a Infinite SEO module below the Write Post / Page editor which you can use to customise SEO options for individual posts and pages.</p>' , 'wds' ), WDS_PLUGIN_URL . 'images/onpagesample.png' );
 
 	$fields = array();
 	if ( WDS_SITEWIDE || 'posts' == get_option('show_on_front') ) {
@@ -456,7 +456,7 @@ function wds_seoopt_settings() {
 	if ( wds_is_wizard_step( '3' ) )
 		$settings = new WDS_Core_Admin_Tab( $name, $title, $description, $fields, 'wds', $contextual_help );
 }
-add_action( 'init', 'wds_seoopt_settings' );
+add_action( 'init', 'wds_seoopt_settings', 999 ); // Ensure we're registered late enough
 
 /* Default settings */
 function wds_seoopt_defaults() {

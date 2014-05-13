@@ -29,7 +29,7 @@ function wpmudev_vids_help($old_help, $screen_id, $screen) {
 
 	if ( isset($wpmudev_video_pages[$screen_id]) ) {
 		$hidden = $wpmudev_vids->get_setting('hide');
-		$contextual_help = '<div id="poststuff" class="metabox-holder">';	   	 	    				  		
+		$contextual_help = '<div id="poststuff" class="metabox-holder">';
 		foreach ($wpmudev_video_pages[$screen_id] as $video) {
 			//remove any hidden videos from the list
 			if (isset($hidden[$video]))

@@ -3,8 +3,8 @@
 Plugin Name: WPMU DEV Videos
 Plugin URI: http://premium.wpmudev.org/project/unbranded-video-tutorials/
 Description: A simple way to integrate WPMU DEV's over 40 unbranded support videos into your websites. Simply activate this plugin, then configure where and how you want to display the video tutorials.
-Author: Aaron Edwards (Incsub)
-Version: 1.2.5
+Author: WPMU DEV
+Version: 1.2.6
 Author URI: http://premium.wpmudev.org/
 Network: true
 WDP ID: 248
@@ -12,6 +12,8 @@ WDP ID: 248
 
 /*
 Copyright 2007-2014 Incsub (http://incsub.com)
+Author - Aaron Edwards
+Contributors -
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License (Version 2 - GPLv2) as published by
@@ -33,7 +35,7 @@ class WPMUDEV_Videos {
 	//---Config---------------------------------------------------------------//
 	//------------------------------------------------------------------------//
 
-	var $version = '1.2.5';
+	var $version = '1.2.6';
 	var $api_url = 'http://premium.wpmudev.org/video-api-register.php';
 	var $video_list;
 	var $video_cats;
@@ -138,7 +140,7 @@ class WPMUDEV_Videos {
 	}
 
 	function plug_pages() {
-		global $wpdb;
+		global $wpdb, $wp_version;
 
 		//define this in wp-config to hide the setting menu
 		if ( !defined('WPMUDEV_VIDS_HIDE_SETTINGS') )
@@ -160,7 +162,8 @@ class WPMUDEV_Videos {
 				add_submenu_page( 'incsub_support', $this->get_setting('menu_title'), $this->get_setting('menu_title'), 'read', 'video-tuts', array( &$this, 'page_output') );
 				$this->page_url = admin_url("admin.php?page=video-tuts");
 			} else if ($this->get_setting('menu_location') == 'top') {
-				add_menu_page( $this->get_setting('menu_title'), $this->get_setting('menu_title'), 'read', 'video-tuts', array( &$this, 'page_output'), plugins_url( 'includes/icon.png' , __FILE__ ), 50 );
+				$icon = version_compare($wp_version, '3.8', '>=') ? 'dashicons-format-video' : plugins_url( 'includes/icon.png' , __FILE__ );
+				add_menu_page( $this->get_setting('menu_title'), $this->get_setting('menu_title'), 'read', 'video-tuts', array( &$this, 'page_output'), $icon, 50.23 );
 				$this->page_url = admin_url("admin.php?page=video-tuts");
 			}
 		}
@@ -256,7 +259,7 @@ class WPMUDEV_Videos {
 							<?php
 							$result = wp_remote_get($this->api_url . '?domain_id=' . network_site_url() );
 							if ( is_wp_error($result) ) {
-								echo '<div class="error"><p>'.sprintf(__('Whoops, your server is having trouble connecting to the WPMU DEV API! If this problem continues, please contact your host and ask them to "make sure php and any firewall is configured to allow an HTTP GET call via curl or fsockopen to %s.', 'wpmudev_vids'), $this->api_url).'</p></div>';
+								echo '<div class="error"><p>'.sprintf(__('Whoops, your server is having trouble connecting to the WPMU DEV API! If this problem continues, please contact your host and ask them to "make sure php and any firewall is configured to allow an HTTP GET call via curl or fsockopen to %s.', 'wpmudev_vids'), $this->api_url).'</p></div>';	   	 	    				  		
 							} else if (!is_numeric($result['body'])) { ?>
 							<span class="description"><?php printf(__('Please register this domain "%s" below: ', 'wpmudev_vids'), network_site_url()); ?></span>
 							<iframe src="<?php echo $this->api_url . '?new_domain=' . network_site_url(); ?>" width="100%" height="150"></iframe>

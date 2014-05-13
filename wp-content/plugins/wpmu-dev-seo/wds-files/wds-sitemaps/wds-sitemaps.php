@@ -452,12 +452,12 @@ function wds_get_sitemap_path () {
 	global $wds_options;
 
 	$dir = wp_upload_dir();
-	$path = $wds_options['sitemappath']; // First thing first, try the sitewide option
+	$path = !empty($wds_options['sitemappath']) ? $wds_options['sitemappath'] : false; // First thing first, try the sitewide option
 
 	// Not in sitewide mode, check per-blog options
 	if (!WDS_SITEWIDE) {
 		$_data = get_option('wds_sitemap_options');
-		$path = $_data['sitemappath'];
+		$path = !empty($_data['sitemappath']) ? $_data['sitemappath'] : false;
 	}
 
 	// If there isn't a dir we need to write to,

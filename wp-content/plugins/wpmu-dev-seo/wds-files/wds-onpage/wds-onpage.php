@@ -165,11 +165,19 @@ class WDS_OnPage {
 		$this->wds_meta_keywords();
 
 		// Verification codes
-		if (@$wds_options['verification-google']) {
-			echo '<meta name="google-site-verification" content="' . esc_attr($wds_options['verification-google']) . '" />' . "\n";
+		if (!empty($wds_options['verification-google'])) {
+			if (
+				empty($wds_options['verification-pages']) // No specificity
+				||
+				!empty($wds_options['verification-pages']) && 'home' === $wds_options['verification-pages'] && is_front_page() // Front-page only
+			) echo '<meta name="google-site-verification" content="' . esc_attr($wds_options['verification-google']) . '" />' . "\n";
 		}
-		if (@$wds_options['verification-bing']) {
-			echo '<meta name="msvalidate.01" content="' . esc_attr($wds_options['verification-bing']) . '" />' . "\n";
+		if (!empty($wds_options['verification-bing'])) {
+			if (
+				empty($wds_options['verification-pages']) // No specificity
+				||
+				!empty($wds_options['verification-pages']) && 'home' === $wds_options['verification-pages'] && is_front_page() // Front-page only
+			) echo '<meta name="msvalidate.01" content="' . esc_attr($wds_options['verification-bing']) . '" />' . "\n";
 		}
 	}
 
@@ -387,26 +395,30 @@ class WDS_OnPage {
 
 		if (is_singular()) {
 			if (function_exists('groups_get_current_group') && 'groups' == bp_current_component() && $group = groups_get_current_group()) { // BP group?
-				$metadesc = wds_replace_vars($wds_options['metadesc-bp_groups'], array(
+				$optvar = !empty($wds_options['metadesc-bp_groups']) ? $wds_options['metadesc-bp_groups'] : '';
+				$metadesc = wds_replace_vars($optvar, array(
 					'name' => $group->name,
 					'description' => $group->description
 				));
 			} else if (function_exists('bp_current_component') && 'profile' == bp_current_component()) {
-				$metadesc = wds_replace_vars($wds_options['metadesc-bp_profile'], array(
+				$optvar = !empty($wds_options['metadesc-bp_profile']) ? $wds_options['metadesc-bp_profile'] : '';
+				$metadesc = wds_replace_vars($optvar, array(
 					'full_name' => bp_get_displayed_user_fullname(),
 					'username' => bp_get_displayed_user_username(),
 				));
 			} else {
 				$metadesc = wds_get_value('metadesc');
-				if ($metadesc == '' || !$metadesc) {
-					$metadesc = wds_replace_vars($wds_options['metadesc-'.$post->post_type], (array) $post );
+				if (empty($metadesc)) {
+					$optvar = !empty($wds_options['metadesc-'.$post->post_type]) ? $wds_options['metadesc-'.$post->post_type] : '';
+					$metadesc = wds_replace_vars($optvar, (array) $post );
 				}
 			}
 		} else if (function_exists('is_shop') && is_shop() && function_exists('woocommerce_get_page_id')) { // WooCommerce shop page
 			$post_id = woocommerce_get_page_id('shop');
 			$metadesc = wds_get_value('metadesc', $post_id);
-			if ($metadesc == '' || !$metadesc) {
-				$metadesc = wds_replace_vars($wds_options['metadesc-'.$post->post_type], (array) $post );
+			if (empty($metadesc)) {
+				$optvar = !empty($wds_options['metadesc-'.$post->post_type]) ? $wds_options['metadesc-'.$post->post_type] : '';
+				$metadesc = wds_replace_vars($optvar, (array) $post );
 			}
 		} else {
 			if ( is_home() && 'posts' == get_option('show_on_front') && isset($wds_options['metadesc-home']) ) {
@@ -428,12 +440,14 @@ class WDS_OnPage {
 				$author_id = get_query_var('author');
 				$metadesc = get_the_author_meta('wds_metadesc', $author_id);
 			} else if (function_exists('groups_get_current_group') && 'groups' == bp_current_component() && $group = groups_get_current_group()) { // BP group?
-				$metadesc = wds_replace_vars($wds_options['metadesc-bp_groups'], array(
+				$optvar = !empty($wds_options['metadesc-bp_groups']) ? $wds_options['metadesc-bp_groups'] : '';
+				$metadesc = wds_replace_vars($optvar, array(
 					'name' => $group->name,
 					'description' => $group->description
 				));
 			} else if (function_exists('bp_current_component') && 'profile' == bp_current_component()) {
-				$metadesc = wds_replace_vars($wds_options['metadesc-bp_profile'], array(
+				$optvar = !empty($wds_options['metadesc-bp_profile']) ? $wds_options['metadesc-bp_profile'] : '';
+				$metadesc = wds_replace_vars($optvar, array(
 					'full_name' => bp_get_displayed_user_fullname(),
 					'username' => bp_get_displayed_user_username(),
 				));

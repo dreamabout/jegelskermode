@@ -5,6 +5,12 @@ Change Log:
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 
+1.6.8 - 2014-02-02
+----------------------------------------------------------------------
+- Added verification code options.
+- Added experimental features flag.
+- Fix for the settings binding by pushing it up the queue.
+
 1.6.7 - 2013-12-20
 ----------------------------------------------------------------------
 - Exposed the meta description for filtering.
@@ -287,4 +293,4 @@ exist yet
 - Initial Release.
 
 
-282619-1389874727-au
+282619-1391423015-au

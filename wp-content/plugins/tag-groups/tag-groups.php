@@ -4,12 +4,13 @@ Plugin Name: Tag Groups
 Plugin URI: http://www.christoph-amthor.de/software/tag-groups/
 Description: Assign tags to groups and display them in a tabbed tag cloud
 Author: Christoph Amthor
-Version: 0.12.1
+Version: 0.13
 Author URI: http://www.christoph-amthor.de
 License: GNU GENERAL PUBLIC LICENSE, Version 3
+Text Domain: tag-groups
 */
 
-define("TAG_GROUPS_VERSION", "0.12.1");
+define("TAG_GROUPS_VERSION", "0.13");
 
 define("TAG_GROUPS_BUILT_IN_THEMES", "ui-gray,ui-lightness,ui-darkness");
 
@@ -29,6 +30,19 @@ add_action( 'wp_enqueue_scripts', 'tg_add_js_css' );
 
 add_action( 'admin_enqueue_scripts', 'tg_add_admin_js_css' );
 
+add_action('plugins_loaded', 'tg_plugin_init');
+
+
+function tg_plugin_init() {
+/*
+	Loading text domain for internationalization
+*/
+
+	$plugin_dir = basename(dirname(__FILE__));
+
+	load_plugin_textdomain( 'tag-groups', false, $plugin_dir . '/languages/' );
+
+}
 
 function tg_widget_hook() {
 /*
@@ -286,7 +300,7 @@ function tg_update_edit_term_group($term_id) {
 			
 		}
 		
-	} else wp_die( __( 'Cheatin&#8217; uh?' ) );
+	} else wp_die( __( 'Cheatin&#8217; uh?' , 'tag-groups') );
 
 }
 
@@ -344,11 +358,11 @@ function tg_expand_quick_edit_link($actions, $tag) {
 	
 	$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="';
 
-	$actions['inline hide-if-no-js'] .= esc_attr( __( 'Edit this item inline' ) ) . '" ';
+	$actions['inline hide-if-no-js'] .= esc_attr( __( 'Edit this item inline' , 'tag-groups') ) . '" ';
 
 	$actions['inline hide-if-no-js'] .= " onclick=\"set_inline_tag_group_selected('{$tag_group_id}', '{$nonce}')\">"; 
 
-	$actions['inline hide-if-no-js'] .= __( 'Quick&nbsp;Edit' );
+	$actions['inline hide-if-no-js'] .= __( 'Quick&nbsp;Edit' , 'tag-groups');
 
 	$actions['inline hide-if-no-js'] .= '</a>';
 
@@ -658,7 +672,7 @@ function tg_group_administration() {
 			<input id="label" maxlength="100" size="70" name="label" value="<?php echo $label ?>" /></li>   
 		</ul>
 		<input class='button-primary' type='submit' name='Save' value='<?php _e('Create Group', 'tag-groups'); ?>' id='submitbutton' />
-		<input class='button-primary' type='button' name='Cancel' value='<?php _e('Cancel'); ?>' id='cancel' onclick="location.href='edit.php?page=tag-groups'"/>
+		<input class='button-primary' type='button' name='Cancel' value='<?php _e('Cancel', 'tag-groups'); ?>' id='cancel' onclick="location.href='edit.php?page=tag-groups'"/>
 		</form>
 	<?php break;
 	
@@ -672,7 +686,7 @@ function tg_group_administration() {
 			<input id="label" maxlength="100" size="70" name="label" value="<?php echo $tag_group_labels[$tag_groups_id] ?>" /></li>   
 		</ul>
 		<input class='button-primary' type='submit' name='Save' value='<?php _e('Save Group', 'tag-groups' ); ?>' id='submitbutton' />
-		<input class='button-primary' type='button' name='Cancel' value='<?php _e('Cancel'); ?>' id='cancel' onclick="location.href='edit.php?page=tag-groups'"/>
+		<input class='button-primary' type='button' name='Cancel' value='<?php _e('Cancel', 'tag-groups'); ?>' id='cancel' onclick="location.href='edit.php?page=tag-groups'"/>
 		</form>
 
 	<?php break;
@@ -714,7 +728,7 @@ function tg_group_administration() {
 		<div class="updated fade"><p>
 			<?php printf(__('A tag group with the id %s and the label \'%s\' has been deleted.', 'tag-groups'), $id, $label); ?>
 		</p></div><br clear="all" />
-		<input class='button-primary' type='button' name='ok' value='<?php _e('OK'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups'"/>
+		<input class='button-primary' type='button' name='ok' value='<?php _e('OK', 'tag-groups'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups'"/>
 	<?php break;
 
 	default:
@@ -748,7 +762,7 @@ function tg_group_administration() {
 			 <td><?php echo $tag_group_ids[$i]; ?></td>
 			 <td><?php echo $tag_group_labels[$i] ?></td>
 			 <td><?php echo tg_number_assigned($tag_group_ids[$i]) ?></td>
-			 <td><a href="edit.php?page=tag-groups&action=edit&id=<?php echo $i; ?>"><?php _e('Edit') ?></a>, <a href="#" onclick="var answer = confirm('<?PHP _e('Do you really want to delete the tag group', 'tag-groups') ?> \'<?php echo esc_js($tag_group_labels[$i]) ?>\'?'); if( answer ) {window.location ='edit.php?page=tag-groups&action=delete&id=<?php echo $i ?>&tag-groups-delete-nonce=<?php echo wp_create_nonce('tag-groups-delete-'.$i) ?>'}"><?php _e('Delete') ?></a></td>
+			 <td><a href="edit.php?page=tag-groups&action=edit&id=<?php echo $i; ?>"><?php _e('Edit', 'tag-groups') ?></a>, <a href="#" onclick="var answer = confirm('<?PHP _e('Do you really want to delete the tag group', 'tag-groups') ?> \'<?php echo esc_js($tag_group_labels[$i]) ?>\'?'); if( answer ) {window.location ='edit.php?page=tag-groups&action=delete&id=<?php echo $i ?>&tag-groups-delete-nonce=<?php echo wp_create_nonce('tag-groups-delete-'.$i) ?>'}"><?php _e('Delete', 'tag-groups') ?></a></td>
 			 <td>
 				 <div style="overflow:hidden; position:relative;height:15px;width:27px;clear:both;">
 				 <?php if ($i > 1) :?>
@@ -771,10 +785,10 @@ function tg_group_administration() {
 		<?php endfor; ?>
 
 		<tr>
-		 <td><?php _e('new') ?></td>
+		 <td><?php _e('new', 'tag-groups') ?></td>
 		 <td></td>
 		 <td></td>
-		 <td><a href="edit.php?page=tag-groups&action=new"><?php _e('Create') ?></a></td>
+		 <td><a href="edit.php?page=tag-groups&action=new"><?php _e('Create', 'tag-groups') ?></a></td>
 		 <td></td>
 		</tr>
 		</tbody>
@@ -877,7 +891,7 @@ function tg_settings_page() {
 		<div class="updated fade"><p>
 			<?php _e('Settings saved.', 'tag-groups'); ?>
 		</p></div><br clear="all" />
-		<input class='button-primary' type='button' name='ok' value='<?php _e('OK'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=3'"/>
+		<input class='button-primary' type='button' name='ok' value='<?php _e('OK', 'tag-groups'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=3'"/>
 		<?php
 		
 	break;
@@ -904,7 +918,7 @@ function tg_settings_page() {
 		<div class="updated fade"><p>
 			<?php _e('All groups are deleted and assignments reset.', 'tag-groups'); ?>
 		</p></div><br clear="all" />
-		<input class='button-primary' type='button' name='ok' value='<?php _e('OK'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=4'"/>
+		<input class='button-primary' type='button' name='ok' value='<?php _e('OK', 'tag-groups'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=4'"/>
 		<?php
 	break;
 	
@@ -919,7 +933,7 @@ function tg_settings_page() {
 		<div class="updated fade"><p>
 			<?php _e('All labels were registered.', 'tag-groups' ); ?>
 		</p></div><br clear="all" />
-		<input class='button-primary' type='button' name='ok' value='<?php _e('OK'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=2'"/>
+		<input class='button-primary' type='button' name='ok' value='<?php _e('OK', 'tag-groups'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=2'"/>
 
 	<?php break;
 
@@ -948,7 +962,7 @@ function tg_settings_page() {
 		?> <div class="updated fade"><p>
 		<?php _e('Your tag cloud theme settings have been saved.', 'tag-groups' ); ?>
 		</p></div><br clear="all" />
-		<input class='button-primary' type='button' name='ok' value='<?php _e('OK'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=1'"/>
+		<input class='button-primary' type='button' name='ok' value='<?php _e('OK', 'tag-groups'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=1'"/>
 		<?php
 		
 	break;
@@ -978,7 +992,7 @@ function tg_settings_page() {
 		?> <div class="updated fade"><p>
 		<?php _e('Your tag taxonomy settings have been saved.', 'tag-groups' ); ?>
 		</p></div><br clear="all" />
-		<input class='button-primary' type='button' name='ok' value='<?php _e('OK'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=0'"/>
+		<input class='button-primary' type='button' name='ok' value='<?php _e('OK', 'tag-groups'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=0'"/>
 		<?php
 		
 	break;
@@ -994,7 +1008,7 @@ function tg_settings_page() {
 		?> <div class="updated fade"><p>
 		<?php _e('Your back end settings have been saved.', 'tag-groups' ); ?>
 		</p></div><br clear="all" />
-		<input class='button-primary' type='button' name='ok' value='<?php _e('OK'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=0'"/>
+		<input class='button-primary' type='button' name='ok' value='<?php _e('OK', 'tag-groups'); ?>' id='ok' onclick="location.href='edit.php?page=tag-groups-settings&active-tab=0'"/>
 		<?php
 		
 	break;
@@ -1140,7 +1154,7 @@ function tg_settings_page() {
 
 		
 		<?php if ( $active_tab == 3 ): ?>
-			<p><?php _e('You can use a shortcode to embed the tag cloud directly in a post, page or widget or you call the function in the PHP code of your theme.') ?></p>
+			<p><?php _e('You can use a shortcode to embed the tag cloud directly in a post, page or widget or you call the function in the PHP code of your theme.', 'tag-groups') ?></p>
 			<form method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 			<input type="hidden" name="tag-groups-widget-nonce" id="tag-groups-widget-nonce" value="<?php echo wp_create_nonce('tag-groups-widget') ?>" />
 			<ul>
@@ -1151,48 +1165,49 @@ function tg_settings_page() {
 			</form>
 
 			<p>&nbsp;</p>
-			<h3><?php _e('Further Instructions') ?></h3>
-			<h4>a) <?php _e('Shortcode') ?></h4>
+			<h3><?php _e('Further Instructions', 'tag-groups') ?></h3>
+			<h4>a) <?php _e('Shortcode', 'tag-groups') ?></h4>
 			<p>[tag_groups_cloud]</p>
 			<p><b><?php _e('Parameters', 'tag-groups') ?></b><br /><?php _e('example', 'tag-groups') ?>: [tag_groups_cloud smallest=9 largest=30 include=1,2,10]
-			<?php _e('<ul>
+			<ul>
 			<li>&nbsp;</li>
-			<li><b>Tags or Terms:</b></li>
-			<li><b>smallest=x</b> Font-size in pt of the smallest tags. Default: 12</li>
-			<li><b>largest=x</b> Font-size in pt of the largest tags. Default: 22</li>
-			<li><b>orderby=abc</b> Which field to use for sorting, e.g. count. Default: name</li>
-			<li><b>order=ASC or =DESC</b> Whether to sort the tags in ascending or descending order. Default: ASC</li>
-			<li><b>amount=x</b> Maximum amount of tags in one cloud (per group). Default: 40</li>
-			<li><b>hide_empty=1 or =0</b> Whether to hide or show also tags that are not assigned to any post. Default: 1 (hide empty)</li>
-			<li><b>tags_post_id=x</b> Display only tags that are assigned to the post (or page) with the ID x. If set to 0, it will try to retrieve the current post ID. Default: -1 (all tags displayed)</li>
-			<li><b>separator="•"</b> A separator between the tags. Default: empty</li>
-			<li><b>separator_size=12</b> The size of the separator. Default: 12</li>
-			<li><b>adjust_separator_size=1 or =0</b> Whether to adjust the separator\'s size to the size of the following tag. Default: 0</li>
-			<li><b>prepend="#"</b> Prepend to each tag label. Default: empty</li>
-			<li><b>append="something"</b> Append to each tag label. Default: empty</li>
-			<li><b>taxonomy="x,y,..."</b> Restrict the tags only to these taxonomies. Default: empty (= no restriction)</li>
+			<li><?php _e('<b>Tags or Terms:</b>', 'tag-groups') ?></li>
+			<li><?php _e('<b>smallest=x</b> Font-size in pt of the smallest tags. Default: 12', 'tag-groups') ?></li>
+			<li><?php _e('<b>largest=x</b> Font-size in pt of the largest tags. Default: 22', 'tag-groups') ?></li>
+			<li><?php _e('<b>orderby=abc</b> Which field to use for sorting, e.g. count. Default: name', 'tag-groups') ?></li>
+			<li><?php _e('<b>order=ASC or =DESC</b> Whether to sort the tags in ascending or descending order. Default: ASC', 'tag-groups') ?></li>
+			<li><?php _e('<b>amount=x</b> Maximum amount of tags in one cloud (per group). Default: 40', 'tag-groups') ?></li>
+			<li><?php _e('<b>hide_empty=1 or =0</b> Whether to hide or show also tags that are not assigned to any post. Default: 1 (hide empty)', 'tag-groups') ?></li>
+			<li><?php _e('<b>tags_post_id=x</b> Display only tags that are assigned to the post (or page) with the ID x. If set to 0, it will try to retrieve the current post ID. Default: -1 (all tags displayed)', 'tag-groups') ?></li>
+			<li><?php _e('<b>separator="•"</b> A separator between the tags. Default: empty', 'tag-groups') ?></li>
+			<li><?php _e('<b>separator_size=12</b> The size of the separator. Default: 12', 'tag-groups') ?></li>
+			<li><?php _e('<b>adjust_separator_size=1 or =0</b> Whether to adjust the separator\'s size to the size of the following tag. Default: 0', 'tag-groups') ?></li>
+			<li><?php _e('<b>prepend="#"</b> Prepend to each tag label. Default: empty', 'tag-groups') ?></li>
+			<li><?php _e('<b>append="something"</b> Append to each tag label. Default: empty', 'tag-groups') ?></li>
+			<li><?php _e('<b>taxonomy="x,y,..."</b> Restrict the tags only to these taxonomies. Default: empty (= no restriction)', 'tag-groups') ?></li>
 			
 			<li>&nbsp;</li>
-			<li><b>Groups and Tabs:</b></li>
-			<li><b>include="x,y,..."</b> IDs of tag groups (left column in list of groups) that will be considered in the tag cloud. Empty or not used means that all tag groups will be used. Default: empty</li>
-			<li><b>groups_post_id=x</b> Display only groups of which at least one assigned tag is also assigned to the post (or page) with the ID x. If set to 0, it will try to retrieve the current post ID. Default: -1 (all groups displayed). Matching groups will be added to the list specified by the parameter <b>include</b>.</li>
-			<li><b>show_tabs=1 or =0</b> Whether to show the tabs. Default: 1</li>
-			<li><b>hide_empty_tabs=1 or =0</b> Whether to hide tabs without tags. Default: 0 (Not implemented for PHP function with second parameter set to \'true\'. Not effective with <b>groups_post_id</b>.)</li>
-			<li><b>collapsible=1 or =0</b> Whether tabs are collapsible (toggle open/close). Default: general settings in the back end</li>
-			<li><b>mouseover=1 or =0</b> Whether tabs can be selected by hovering over with the mouse pointer (without clicking). Default: general settings in the back end</li>
+			<li><?php _e('<b>Groups and Tabs:</b>', 'tag-groups') ?></li>
+			<li><?php _e('<b>include="x,y,..."</b> IDs of tag groups (left column in list of groups) that will be considered in the tag cloud. Empty or not used means that all tag groups will be used. Default: empty', 'tag-groups') ?></li>
+			<li><?php _e('<b>groups_post_id=x</b> Display only groups of which at least one assigned tag is also assigned to the post (or page) with the ID x. If set to 0, it will try to retrieve the current post ID. Default: -1 (all groups displayed). Matching groups will be added to the list specified by the parameter <b>include</b>.', 'tag-groups') ?></li>
+			<li><?php _e('<b>show_tabs=1 or =0</b> Whether to show the tabs. Default: 1', 'tag-groups') ?></li>
+			<li><?php _e('<b>hide_empty_tabs=1 or =0</b> Whether to hide tabs without tags. Default: 0 (Not implemented for PHP function with second parameter set to \'true\'. Not effective with <b>groups_post_id</b>.)', 'tag-groups') ?></li>
+			<li><?php _e('<b>collapsible=1 or =0</b> Whether tabs are collapsible (toggle open/close). Default: general settings in the back end', 'tag-groups') ?></li>
+			<li><?php _e('<b>mouseover=1 or =0</b> Whether tabs can be selected by hovering over with the mouse pointer (without clicking). Default: general settings in the back end', 'tag-groups') ?></li>
 
 			<li>&nbsp;</li>
-			<li><b>Advanced Styling:</b></li>
-			<li><b>div_id=abc</b> Define an id for the enclosing '.htmlentities('<div>').'. You need to define different values if you use more than one cloud on one page. Make sure this id has not yet been used - including the active theme and other plugins. Recommended are non-standard values to avoid collisions of names, replace spaces by underscores or hyphens, or use "camelCase". Default: tag-groups-cloud-tabs</li>
-			<li><b>div_class=abc</b> Define a class for the enclosing '.htmlentities('<div>').'. Default: tag-groups-cloud-tabs</li>
-			<li><b>ul_class=abc</b> Define a class for the '.htmlentities('<ul>').' that generates the tabs with the group labels. Default: empty</li>
-			</ul>', 'tag-groups') ?></p>
+			<li><?php _e('<b>Advanced Styling:</b>', 'tag-groups') ?></li>
+			<li><?php _e('<b>div_id=abc</b> Define an id for the enclosing &lt;div&gt;. You need to define different values if you use more than one cloud on one page. Make sure this id has not yet been used - including the active theme and other plugins. Recommended are non-standard values to avoid collisions of names, replace spaces by underscores or hyphens, or use "camelCase". Default: tag-groups-cloud-tabs', 'tag-groups') ?></li>
+			<li><?php _e('<b>div_class=abc</b> Define a class for the enclosing &lt;div&gt;. Default: tag-groups-cloud-tabs', 'tag-groups') ?></li>
+			<li><?php _e('<b>ul_class=abc</b> Define a class for the &lt;div&gt; that generates the tabs with the group labels. Default: empty', 'tag-groups') ?></li>
+			</ul>
+			</p>
 			<p>&nbsp;</p>
 			<h4>b) PHP</h4>
 			<p><?php _e('By default the function <b>tag_groups_cloud</b> returns the html for a tabbed tag cloud.', 'tag-groups') ?></p>
-			<p><?php _e('Example: ', 'tag-groups'); echo htmlentities("<?php if ( function_exists( 'tag_groups_cloud' ) ) echo tag_groups_cloud( array( 'include' => '1,2,5,6' ) ); ?>") ?></p>
+			<p><?php _e('Example:', 'tag-groups'); echo ' '.htmlentities("<?php if ( function_exists( 'tag_groups_cloud' ) ) echo tag_groups_cloud( array( 'include' => '1,2,5,6' ) ); ?>") ?></p>
 			<p><?php _e('If the optional second parameter is set to \'true\', the function returns a multidimensional array containing tag groups and tags.', 'tag-groups'); ?></p>
-			<p><?php _e('Example: ', 'tag-groups'); echo htmlentities("<?php if ( function_exists( 'tag_groups_cloud' ) ) print_r( tag_groups_cloud( array( 'orderby' => 'count', 'order' => 'DESC' ), true ) ); ?>") ?></p>
+			<p><?php _e('Example:', 'tag-groups'); echo ' '.htmlentities("<?php if ( function_exists( 'tag_groups_cloud' ) ) print_r( tag_groups_cloud( array( 'orderby' => 'count', 'order' => 'DESC' ), true ) ); ?>") ?></p>
 		<?php endif; ?>
 
 
@@ -1210,11 +1225,12 @@ function tg_settings_page() {
 
 		<?php if ( $active_tab == 5 ): ?>
 			<h4>Tag Groups, Version: <?php echo TAG_GROUPS_VERSION ?></h4>
-			<p>If you find a bug or have a question, please visit the official <a href="http://wordpress.org/support/plugin/tag-groups" target="_blank">support forum</a>. There is also a <a href="http://www.christoph-amthor.de/software/tag-groups/" target="_blank">dedicated page</a> with more examples and instructions for particular applications.</p>
-			<h2>Donations</h2>
-			<p>Support the author with a microdonation <a href="http://flattr.com/thing/721303/Tag-Groups-plugin" target="_blank">
-	<img src="<?php echo plugins_url('images/flattr-badge-large.png', __FILE__) ?>" alt="Flattr this" title="Support through micro-donation" border="0" /></a> or <a href="http://www.burma-center.org/donate/" target="_blank">donate to his favourite charity</a>.</p>
-	<p>Or support his work by a nice link to one of these websites:
+			<p><?php printf(__('If you find a bug or have a question, please visit the official <a %s>support forum</a>. There is also a <a %s>dedicated page</a> with more examples and instructions for particular applications.', 'tag-groups'), 'href="http://wordpress.org/support/plugin/tag-groups" target="_blank"', 'href="http://www.christoph-amthor.de/software/tag-groups/" target="_blank"'); ?></p>
+			<h2><?php _e('Donations', 'tag-groups') ?></h2>
+			<p><?php _e('This plugin is the result of many hours of work, adding new features, fixing bugs and answering to support questions.', 'tag-groups') ?></p>
+			<p><?php printf(__('If you find <b>Tag Groups</b> useful, please support the author with a microdonation %s or <a %s>donate to his favourite charity</a>.', 'tag-groups'), '<a href="http://flattr.com/thing/721303/Tag-Groups-plugin" target="_blank">
+	<img src="'. plugins_url('images/flattr-badge-large.png', __FILE__) .'" alt="Flattr this" title="Support through micro-donation" border="0" /></a>', 'href="http://www.burma-center.org/donate/" target="_blank"'); ?></p>
+	<p><?php _e('Or support his work by a friendly link to one of these websites:', 'tag-groups') ?>
 <ul>
 	<li><a href="http://www.burma-center.org" target="_blank">www.burma-center.org</a></li>
 	<li><a href="http://mycitizen.net" target="_blank">mycitizen.net</a></li>
@@ -1222,7 +1238,7 @@ function tg_settings_page() {
 	<li><a href="http://www.weirdthingsinprague.com" target="_blank">www.weirdthingsinprague.com</a></li>
 	<li><a href="http://www.myanmar-dictionary.org" target="_blank">www.myanmar-dictionary.org</a></li>
 </ul>
-	Thanks!</p>
+	<?php _e('Thanks!', 'tag-groups') ?></p>
 		<?php endif; ?>
 	
 	<?php }	?>

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPMU DEV SEO 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-20 14:38+0100\n"
-"PO-Revision-Date: 2013-12-20 14:38+0100\n"
+"POT-Creation-Date: 2014-02-02 15:34+0100\n"
+"PO-Revision-Date: 2014-02-02 15:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: Incsub\n"
 "MIME-Version: 1.0\n"
@@ -1260,31 +1260,43 @@ msgstr ""
 msgid "No META tag will be added"
 msgstr ""
 
-#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:192
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:191
 msgid "Search engines"
 msgstr ""
 
-#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:193
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:192
 msgid "Options related to direct interaction with search engines."
 msgstr ""
 
-#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:199
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:198
 msgid "Google site verification code"
 msgstr ""
 
-#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:206
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:205
 msgid "Bing site verification code"
 msgstr ""
 
-#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:221
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:211
+msgid "Add verification code to:"
+msgstr ""
+
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:213
+msgid "All pages"
+msgstr ""
+
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:214
+msgid "Home page"
+msgstr ""
+
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:220
 msgid "Automatically notify search engines when my sitemap updates"
 msgstr ""
 
-#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:223
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:222
 msgid "Google"
 msgstr ""
 
-#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:224
+#: wds-files/wds-sitemaps/wds-sitemaps-settings.php:223
 msgid "Bing"
 msgstr ""
 

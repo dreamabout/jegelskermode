@@ -13,7 +13,7 @@ function wds_settings() {
 	);
 	$seo_metabox_permission_levels = apply_filters('wds-seo_metabox_permission_levels', $default_roles);
 	$seo_metabox_301_permission_levels = apply_filters('wds-seo_metabox_301_permission_levels', $default_roles);
-	$urlmetrics_metabox_permission_levels = apply_filters('wds-urlmetrics_metabox_permission_level', $default_roles);
+	$urlmetrics_metabox_permission_levels = apply_filters('wds-urlmetrics_metabox_permission_level', $default_roles);	   	 	    	 	   	 
 	$description = __( '
 		<p>Infinite SEO aims to take care of every SEO option that a site requires, in one easy bundle.</p>
 		<p>It is made of several components which you complete as you work through our simple SEO Set Up Wizard:</p>

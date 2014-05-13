@@ -385,7 +385,7 @@ function user_can_see_seo_metabox () {
 	global $wds_options;
 	$capability = (defined('WDS_SEO_METABOX_ROLE') && WDS_SEO_METABOX_ROLE)
 		? WDS_SEO_METABOX_ROLE
-		: $wds_options['seo_metabox_permission_level']
+		: (!empty($wds_options['seo_metabox_permission_level']) ? $wds_options['seo_metabox_permission_level'] : false)
 	;
 	return current_user_can(apply_filters('wds-capabilities-seo_metabox', $capability));
 }
@@ -400,7 +400,7 @@ function user_can_see_urlmetrics_metabox () {
 	global $wds_options;
 	$capability = (defined('WDS_URLMETRICS_METABOX_ROLE') && WDS_URLMETRICS_METABOX_ROLE)
 		? WDS_URLMETRICS_METABOX_ROLE
-		: $wds_options['urlmetrics_metabox_permission_level']
+		: (!empty($wds_options['urlmetrics_metabox_permission_level']) ? $wds_options['urlmetrics_metabox_permission_level'] : false)
 	;
 	return current_user_can(apply_filters('wds-capabilities-urlmetrics_metabox', $capability));
 }
@@ -415,7 +415,7 @@ function user_can_see_seo_metabox_301_redirect () {
 	global $wds_options;
 	$capability = (defined('WDS_SEO_METABOX_301_ROLE') && WDS_SEO_METABOX_301_ROLE)
 		? WDS_SEO_METABOX_301_ROLE
-		: $wds_options['seo_metabox_301_permission_level']
+		: (!empty($wds_options['seo_metabox_301_permission_level']) ? $wds_options['seo_metabox_301_permission_level'] : false)
 	;
 	return current_user_can(apply_filters('wds-capabilities-seo_metabox_301_redirect', $capability));
 }

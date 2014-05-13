@@ -3,7 +3,7 @@
 class WDS_XML_VideoSitemap {
 
 	const VIDEO_SITEMAP_LIMIT = 50000;
-	const FALLBACK_VIDEO_THUMBNAIL = 'http://images.ebaumsworld.com/img/defaultVideo.png';
+	const FALLBACK_VIDEO_THUMBNAIL = '';
 
 	private $_provider_regex = array();
 	private $_no_video_oembed = array(
@@ -30,8 +30,10 @@ class WDS_XML_VideoSitemap {
 		// ... hooks
 
 		if (is_admin()) return false;
-		$this->update_items_list();
-		$this->serve_video_sitemap();
+		if (preg_match('~' . preg_quote('/video-sitemap.xml') . '(\.gz)?$~i', $_SERVER['REQUEST_URI'])) {
+			$this->update_items_list();
+			$this->serve_video_sitemap();
+		}
 	}
 
 	function serve_video_sitemap () {
@@ -93,8 +95,9 @@ class WDS_XML_VideoSitemap {
 		if (!$image) {
 			$image = $this->_extract_thumbnail_from_player_src($raw->ID, $player);
 			$image = apply_filters('wds-video_sitemaps-thumbnail_url', $image, $raw->ID, $player);
-			$image = $image ? $image : apply_filters('wds-video_sitemaps-thumbnail_url-fallback', self::FALLBACK_VIDEO_THUMBNAIL);
+			$image = $image ? $image : apply_filters('wds-video_sitemaps-thumbnail_url-fallback', $image);
 		}
+		if (!$image) return false; // No thumbnail image, we can't add this itemc
 
 		$loc = get_permalink($raw->ID);
 		$this->_items[$loc] = array(
@@ -120,13 +123,14 @@ class WDS_XML_VideoSitemap {
 		} else if (preg_match('/vimeo/', $host)) {
 		// Vimeo
 			// Vimeo requires us to to an API call, so...
-			// First check if we're to do this
-			if (!(defined('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS') && WDS_VIDEO_SITEMAP_ALLOW_API_CALLS)) return false;
 
-			// Next, find out video ID and check cache.
+			// First find out video ID and check cache.
 			$video_id = end(explode('/', $path));
 			$thumbnail = get_post_meta($post_id, '_vimeo_thumbnail_id-' . $video_id, true);
 			if ($thumbnail) return $thumbnail;
+
+			// Next, check if we're to do this
+			if (!(defined('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS') && WDS_VIDEO_SITEMAP_ALLOW_API_CALLS)) return false;
 
 			// No cache - fetch from remote API and update cache for next time
 			$response = wp_remote_get("http://vimeo.com/api/v2/video/{$video_id}.php");
@@ -139,12 +143,13 @@ class WDS_XML_VideoSitemap {
 			return $thumbnail;
 		} else if (preg_match('/blip\.tv/', $host)) {
 		// Blip.tv
-			// Blip.tv - same deal as Vimeo, remote call is needed
-			if (!(defined('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS') && WDS_VIDEO_SITEMAP_ALLOW_API_CALLS)) return false;
 
 			$video_id = end(explode('/', $path));
 			$thumbnail = get_post_meta($post_id, '_blip_thumbnail_id-' . $video_id, true);
 			if ($thumbnail) return $thumbnail;
+
+			// Blip.tv - same deal as Vimeo, remote call is needed
+			if (!(defined('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS') && WDS_VIDEO_SITEMAP_ALLOW_API_CALLS)) return false;
 
 			// No cache - fetch from remote API and update cache for next time
 			$response = wp_remote_get("http://blip.tv/players/episode/{$video_id}?skin=rss");
@@ -158,12 +163,13 @@ class WDS_XML_VideoSitemap {
 			return $thumbnail;
 		} else if (preg_match('/wordpress\./', $host)) {
 		// WordPress.tv
-			// Dispatch an oEmbed call, if allowed and needed
-			if (!(defined('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS') && WDS_VIDEO_SITEMAP_ALLOW_API_CALLS)) return false;
 
 			$video_id = end(explode('/', $path));
 			$thumbnail = get_post_meta($post_id, '_wordpresstv_thumbnail_id-' . $video_id, true);
 			if ($thumbnail) return $thumbnail;
+
+			// Dispatch an oEmbed call, if allowed and needed
+			if (!(defined('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS') && WDS_VIDEO_SITEMAP_ALLOW_API_CALLS)) return false;
 
 			$post = get_post($post_id);
 			$src = preg_match('#(http://wordpress.tv/[-_/.a-z0-9]+)#i', $post->post_content, $matches);
@@ -274,11 +280,4 @@ class WDS_XML_VideoSitemap {
 }
 add_action('init', array('WDS_XML_VideoSitemap', 'serve'));
 
-function _dbg ($x) {
-	echo '<pre>'; die(var_export($x));
-}
-
-function _dbgx ($x) {
-	echo '<pre>' . var_export($x,1) . '</pre>';
-}
-define('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS', true);
+if (!defined('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS')) define('WDS_VIDEO_SITEMAP_ALLOW_API_CALLS', true);

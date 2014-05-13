@@ -187,7 +187,6 @@ function wds_sitemaps_settings() {
 	);
 	$google_msg = @$wds_options['verification-google'] ? '<code>' . esc_html('<meta name="google-site-verification" value="') . esc_attr(@$wds_options['verification-google']) . esc_html('" />') . '</code>' : '<small>' . __('No META tag will be added', 'wds') . '</small>';
 	$bing_msg = @$wds_options['verification-bing'] ? '<code>' . esc_html('<meta name="msvalidate.01" value="') . esc_attr(@$wds_options['verification-bing']) . esc_html('" />') . '</code>' : '<small>' . __('No META tag will be added', 'wds') . '</small>';
-	//$yahoo_msg = @$wds_options['verification-yahoo'] ? '<code>' . esc_html('<meta name="y_key" value="') . esc_attr(@$wds_options['verification-yahoo']) . esc_html('" />') . '</code>' : '<small>' . __('No META tag will be added', 'wds') . '</small>';
 	$fields['search-engines'] = array(
 		'title' => __('Search engines', 'wds'),
 		'intro' => __('Options related to direct interaction with search engines.', 'wds'),
@@ -206,15 +205,15 @@ function wds_sitemaps_settings() {
 				'title' => __( 'Bing site verification code' , 'wds'),
 				'description' => "<p>{$bing_msg}</p>",
 			),
-			/*
 			array(
-				'type' => 'text',
-				'class' => 'widefat',
-				'name' => 'verification-yahoo',
-				'title' => __( 'Yahoo site verification code' , 'wds'),
-				'description' => "<p>{$yahoo_msg}</p>",
+				'type' => 'radio',
+				'name' => 'verification-pages',
+				'title' => __('Add verification code to:', 'wds'),
+				'items' => array(
+					'' => __('All pages', 'wds'),
+					'home' => __('Home page', 'wds'),
+				),
 			),
-			*/
 			array(
 				'type' => 'checkbox',
 				'name' => 'engines',
@@ -222,8 +221,6 @@ function wds_sitemaps_settings() {
 				'items' => array(
 					'ping-google' => __('Google', 'wds'),
 					'ping-bing' => __('Bing', 'wds'),
-					//'ping-ask' => __('Ask.com', 'wds'),
-					//'ping-yahoo' => __('Yahoo', 'wds'),
 				),
 			),
 		)
